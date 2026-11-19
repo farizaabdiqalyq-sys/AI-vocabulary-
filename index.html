@@ -1,0 +1,89 @@
+<div class="match-task">
+  <h2>Задание 1. Соотнесите слова и синонимы</h2>
+  <p>Выберите синоним из списка для каждого слова.</p>
+
+  <div id="match"></div>
+
+  <button type="button" onclick="checkMatch()">Проверить</button>
+  <button type="button" onclick="resetMatch()">Сбросить</button>
+  <span id="matchResult"></span>
+</div>
+
+<script>
+const matchData = [
+  ["astonishing", "amazing"],
+  ["restriction", "limitation"],
+  ["temporary", "short-term"],
+  ["accelerate", "speed up"],
+  ["specify", "define clearly"],
+  ["consequence", "result"],
+  ["autonomy", "independence"],
+  ["ensure", "guarantee"],
+  ["efficiently", "productively"],
+  ["suffering", "pain"]
+];
+
+// Варианты перемешаны
+const matchOptions = [
+  "productively",
+  "short-term",
+  "guarantee",
+  "pain",
+  "define clearly",
+  "amazing",
+  "independence",
+  "speed up",
+  "result",
+  "limitation"
+];
+
+const matchContainer = document.getElementById("match");
+
+matchContainer.innerHTML = matchData.map((item, index) => `
+  <div class="match-item">
+    <label>
+      <strong>${index + 1}. ${item[0]}</strong>
+      <select data-answer="${item[1]}">
+        <option value="">Выберите синоним</option>
+        ${matchOptions.map(option =>
+          `<option value="${option}">${option}</option>`
+        ).join("")}
+      </select>
+    </label>
+    <span class="feedback"></span>
+  </div>
+`).join("");
+
+function checkMatch() {
+  let correct = 0;
+
+  document.querySelectorAll("#match select").forEach(select => {
+    const isCorrect = select.value === select.dataset.answer;
+    const feedback = select.closest(".match-item").querySelector(".feedback");
+
+    if (isCorrect) {
+      correct++;
+      feedback.textContent = "Верно!";
+      feedback.style.color = "green";
+    } else {
+      feedback.textContent = "Правильный ответ: " + select.dataset.answer;
+      feedback.style.color = "crimson";
+    }
+  });
+
+  document.getElementById("matchResult").textContent =
+    `Результат: ${correct} / ${matchData.length}`;
+}
+
+function resetMatch() {
+  document.querySelectorAll("#match select").forEach(select => {
+    select.value = "";
+  });
+
+  document.querySelectorAll("#match .feedback").forEach(feedback => {
+    feedback.textContent = "";
+  });
+
+  document.getElementById("matchResult").textContent = "";
+}
+</script>
